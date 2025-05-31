@@ -1665,6 +1665,36 @@
             });
         });
 
+//-------------------------------------------------------
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    const jsonUrl = 'https://raw.githubusercontent.com/IsmaelLima21/blog/main/data/blog_backup.json'; // Cambia esto por tu URL real
+
+    fetch(jsonUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('No se pudo cargar el archivo JSON');
+            return response.json();
+        })
+        .then(data => {
+            blogPosts = data.blogPosts;
+            footerContent = data.footerContent;
+            headerImageSettings = data.headerImageSettings;
+            advancedOptions = data.advancedOptions;
+            saveToLocalStorage();
+            renderBlogPosts();
+            updateHeaderImage();
+            updateBlogSettings();
+            applyPaginationStyles();
+            applyDynamicStyles();
+            console.log('Configuración restaurada desde JSON remoto.');
+        })
+        .catch(error => {
+            console.error('Error al restaurar datos automáticamente:', error);
+        });
+});
+
+
     </script>
 </body>
 </html>
