@@ -1,0 +1,1670 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus on Content Blog</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&family=Lora&family=Merriweather&family=Open+Sans&family=Montserrat&family=Raleway&family=Nunito&family=Poppins&family=Source+Sans+Pro&family=Sofia&family=Lato&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.snow.css" rel="stylesheet">
+<style>
+    /* Default styles */
+    body {
+        font-family: 'Roboto', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #fafafa;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        flex: 1;
+        /* Apply dynamic background/text color */
+        background-color: var(--body-background-color, initial);
+        color: var(--body-text-color, initial);
+    }
+    a {
+        color: var(--body-link-color, #007bff); /* Default Bootstrap primary color */
+    }
+    .sidebar {
+        width: 300px;
+        height: 100vh;
+        position: fixed;
+        left: -300px;
+        top: 0;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        transition: left 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        padding: 20px;
+        overflow-y: auto;
+        z-index: 1000;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .sidebar.open {
+        left: 0;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+    }
+    .sidebar h2, .sidebar h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        font-family: 'Playfair Display', serif;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+    .sidebar h2 i, .sidebar h3 i {
+        margin-right: 10px;
+        color: #3498db;
+    }
+    .sidebar-button {
+        display: block;
+        width: 100%;
+        padding: 12px 20px;
+        margin-bottom: 15px;
+        background-color: #ffffff;
+        color: #2c3e50;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: left;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .sidebar-button:hover {
+        background-color: #3498db;
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .sidebar-button i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+    }
+    .toggle-btn {
+        position: fixed;
+        left: 20px;
+        top: 20px;
+        z-index: 1001;
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .toggle-btn:hover {
+        background-color: #2980b9;
+        transform: scale(1.1);
+    }
+    header {
+        text-align: center;
+        margin-bottom: 2em;
+    }
+    h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5em;
+        color: #2c3e50;
+        margin-bottom: 0.5em;
+    }
+    .nav-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2em;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 1em;
+    }
+    .nav-bar a {
+        color: #34495e;
+        text-decoration: none;
+        margin: 0 1em;
+        font-size: 1em;
+        font-weight: 300;
+        transition: color 0.3s ease;
+    }
+    .nav-bar a:hover {
+        color: #2c3e50;
+    }
+    .nav-bar a.active {
+        font-weight: 400;
+        border-bottom: 2px solid #2c3e50;
+    }
+    .blog-post {
+        background-color: var(--post-background-color, #fff); /* Dynamic post background */
+        margin-bottom: 1.5em;
+        border-radius: var(--post-border-radius, 8px); /* Dynamic border radius */
+        overflow: hidden;
+        box-shadow: var(--post-box-shadow, 0 2px 4px rgba(0,0,0,0.05)); /* Dynamic box shadow */
+    }
+    .blog-post-header {
+        background-color: #f8f9fa;
+        padding: 1em;
+        border-bottom: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .blog-post-title, h1 {
+        font-family: var(--title-font-family, 'Playfair Display', serif) !important;
+        margin: 0;
+        color: #2c3e50;
+        cursor: pointer;
+    }
+    .blog-post-content {
+        padding: 1em;
+        display: none;
+        /* Apply dynamic body font family */
+        font-family: var(--body-font-family, 'Roboto', sans-serif) !important; 
+    }
+    .blog-post-content p:last-child {
+        margin-bottom: 0;
+    }
+    .edit-button, .new-post-button {
+        display: inline-block;
+        padding: 0.5em;
+        background-color: #3498db;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        margin-right: 0.5em;
+    }
+    .edit-button:hover, .new-post-button:hover {
+        background-color: #2980b9;
+    }
+    .delete-button {
+        display: inline-block;
+        padding: 0.5em;
+        background-color: #e74c3c;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+    .delete-button:hover {
+        background-color: #c0392b;
+    }
+    #editor-container, #footer-editor-container {
+        height: 300px;
+    }
+    .post-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    .post-list li {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        cursor: move;
+        transition: background-color 0.3s ease;
+    }
+    .post-list li.dragging {
+        opacity: 0.5;
+        background-color: #f0f0f0;
+    }
+    .header-image {
+        width: 100%;
+        height: 300px;
+        background-size: cover;
+        background-position: center;
+        margin-bottom: 2em;
+        display: none;
+    }
+    footer {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        text-align: center;
+        padding: 1em 0;
+        margin-top: 2em;
+    }
+    .locked-post {
+        background-color: #f8f9fa;
+        border-color: #e0e0e0;
+    }
+    .locked-post .blog-post-header {
+        background-color: #e0e0e0;
+    }
+    .unlock-button {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+    }
+    .modal-content {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .modal-header {
+        background-color: #3498db;
+        color: #ffffff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        padding: 20px;
+    }
+    .modal-title {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+    .modal-body {
+        padding: 30px;
+    }
+    .modal-footer {
+        border-top: none;
+        padding: 20px;
+    }
+    .btn-close {
+        color: #ffffff;
+        opacity: 1;
+    }
+    .btn-close:hover {
+        color: #f1c40f;
+        opacity: 1;
+    }
+    .modal .form-label {
+        font-weight: bold;
+        color: #34495e;
+    }
+    .modal .form-control {
+        border-radius: 8px;
+        border: 1px solid #bdc3c7;
+        padding: 12px;
+    }
+    .modal .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+    .modal .btn {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .modal .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+    .modal .btn-primary:hover {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+    .modal .btn-secondary {
+        background-color: #95a5a6;
+        border-color: #95a5a6;
+    }
+    .modal .btn-secondary:hover {
+        background-color: #7f8c8d;
+        border-color: #7f8c8d;
+    }
+    .pinned-post {
+        border-left: 4px solid #ffd700;
+        background-color: #fffdf0;
+    }
+    .pinned-icon {
+        margin-right: 10px;
+        color: #ffd700;
+    }
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+    }
+
+    /* Dynamic styles applied via JS */
+    #dynamicAdvancedStyles {
+        /* CSS variables will be added here */
+    }
+
+    /* Apply CSS variables to existing styles */
+    body {
+        font-family: var(--body-font-family, 'Roboto', sans-serif); /* Apply dynamic font to body */
+        background-color: var(--body-background-color, #fafafa); /* Apply dynamic background */
+        color: var(--body-text-color, #333); /* Apply dynamic text color */
+    }
+
+    .container {
+         background-color: var(--body-background-color, #fafafa); /* Ensure container matches body background */
+         color: var(--body-text-color, #333); /* Ensure container matches body text color */
+    }
+
+
+    .blog-post {
+        background-color: var(--post-background-color, #fff);
+        border-radius: var(--post-border-radius, 8px);
+        box-shadow: var(--post-box-shadow, 0 2px 4px rgba(0,0,0,0.05));
+    }
+
+    .blog-post-content {
+        font-family: var(--body-font-family, 'Roboto', sans-serif) !important; /* Ensure content uses dynamic font */
+    }
+
+    a {
+         color: var(--body-link-color, #007bff);
+    }
+</style>
+<style id="paginationStyles"></style>
+<style id="customStyles"></style>
+<style id="dynamicAdvancedStyles"></style>
+</head>
+<body>
+    <button class="btn btn-primary toggle-btn" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar" id="sidebar">
+        <h2><i class="fas fa-blog"></i> Blog Management</h2>
+        <button class="sidebar-button" onclick="openNewPostModal()"><i class="fas fa-plus"></i> Add New Post</button>
+        <button class="sidebar-button" onclick="openHeaderImageModal()"><i class="fas fa-image"></i> Header Image Settings</button>
+        <button class="sidebar-button" onclick="openExistingPostsModal()"><i class="fas fa-list"></i> Manage Existing Posts</button>
+        <button class="sidebar-button" onclick="openAdvancedOptionsModal()"><i class="fas fa-cogs"></i> Advanced Options</button>
+        <h3><i class="fas fa-footer"></i> Footer</h3>
+        <button class="sidebar-button" onclick="openFooterModal()"><i class="fas fa-edit"></i> Edit Footer</button>
+    </div>
+
+    <div class="container">
+        <div class="header-image" id="headerImage"></div>
+        <header>
+            <h1>Focus on Content</h1>
+        </header>
+
+        <nav class="nav-bar">
+            <a href="https://websimcreative.com/blog/" class="active">Home</a>
+            <a href="https://websimcreative.com/blog/about">About</a>
+            <a href="https://websimcreative.com/blog/archive">Archive</a>
+            <a href="https://websimcreative.com/blog/contact">Contact</a>
+        </nav>
+
+        <main id="blogPosts">
+            <!-- Blog posts will be dynamically inserted here -->
+        </main>
+    </div>
+
+    <footer id="blogFooter">
+        <!-- Footer content will be dynamically inserted here -->
+    </footer>
+
+    <!-- Edit/New Post Modal -->
+    <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="postModalLabel">Edit/Add Blog Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="postForm">
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="postTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editor-container" class="form-label">Content</label>
+                            <div id="editor-container"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="postTags" class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-control" id="postTags">
+                        </div>
+                        <div class="mb-3">
+                            <label for="postDate" class="form-label">Publication Date</label>
+                            <input type="date" class="form-control" id="postDate">
+                        </div>
+                        <div class="mb-3">
+                            <label for="postImage" class="form-label">Add Image</label>
+                            <input type="file" class="form-control" id="postImage" accept="image/*">
+                        </div>
+                        <div class="mb-3">
+                            <input type="checkbox" class="form-check-input" id="isPasswordProtected">
+                            <label class="form-check-label" for="isPasswordProtected">Password Protected</label>
+                        </div>
+                        <div class="mb-3" id="passwordField" style="display: none;">
+                            <label for="postPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="postPassword">
+                        </div>
+                        <div class="mb-3">
+                            <input type="checkbox" class="form-check-input" id="isPinned">
+                            <label class="form-check-label" for="isPinned">Pin Post</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="savePost()">Save Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this post? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deletePost()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Edit Modal -->
+    <div class="modal fade" id="footerModal" tabindex="-1" aria-labelledby="footerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="footerModalLabel">Edit Footer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="footer-editor-container"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveFooter()">Save Footer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordModalLabel">Enter Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="enterPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="enterPassword">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="checkPassword()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Image Modal -->
+    <div class="modal fade" id="headerImageModal" tabindex="-1" aria-labelledby="headerImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="headerImageModalLabel">Header Image Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="headerImageToggle" class="form-label">Show Header Image</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="headerImageToggle">
+                            <label class="form-check-label" for="headerImageToggle">Enable</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="headerImageUrl" class="form-label">Header Image URL</label>
+                        <input type="text" class="form-control" id="headerImageUrl" placeholder="Enter image URL">
+                    </div>
+                    <div class="mb-3">
+                        <label for="headerImageHeight" class="form-label">Header Image Height (px)</label>
+                        <input type="number" class="form-control" id="headerImageHeight" min="100" max="800" value="300">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveHeaderImageSettings()">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Existing Posts Modal -->
+    <div class="modal fade" id="existingPostsModal" tabindex="-1" aria-labelledby="existingPostsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="existingPostsModalLabel">Manage Existing Posts</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="post-list" id="postList">
+                        <!-- Existing posts will be dynamically inserted here -->
+                    </ul>
+                    <div id="postListPagination">
+                        <!-- Pagination controls will be dynamically inserted here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="savePostOrder()">Save Order</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Options Modal -->
+    <div class="modal fade" id="advancedOptionsModal" tabindex="-1" aria-labelledby="advancedOptionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="advancedOptionsModalLabel">Advanced Options</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="advancedOptionsTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="body-content-tab" data-bs-toggle="tab" data-bs-target="#body-content" type="button" role="tab" aria-controls="body-content" aria-selected="false">Body & Content</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="post-styles-tab" data-bs-toggle="tab" data-bs-target="#post-styles" type="button" role="tab" aria-controls="post-styles" aria-selected="false">Post Styles</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="header-tab" data-bs-toggle="tab" data-bs-target="#header" type="button" role="tab" aria-controls="header" aria-selected="false">Header</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button" role="tab" aria-controls="seo" aria-selected="false">SEO</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="social-tab" data-bs-toggle="tab" data-bs-target="#social" type="button" role="tab" aria-controls="social" aria-selected="false">Social Media</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="analytics-tab" data-bs-toggle="tab" data-bs-target="#analytics" type="button" role="tab" aria-controls="analytics" aria-selected="false">Analytics</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="custom-css-tab" data-bs-toggle="tab" data-bs-target="#custom-css" type="button" role="tab" aria-controls="custom-css" aria-selected="false">Custom CSS</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="backup-restore-tab" data-bs-toggle="tab" data-bs-target="#backup-restore" type="button" role="tab" aria-controls="backup-restore" aria-selected="false">Backup & Restore</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-3" id="advancedOptionsTabContent">
+                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                            <h6>Blog Settings</h6>
+                            <div class="mb-3">
+                                <label for="blogName" class="form-label">Blog Name</label>
+                                <input type="text" class="form-control" id="blogName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="blogDescription" class="form-label">Blog Description</label>
+                                <textarea class="form-control" id="blogDescription" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="postsPerPage" class="form-label">Posts per Page</label>
+                                <input type="number" class="form-control" id="postsPerPage" min="1" max="50">
+                            </div>
+                            <h6>Pagination Button Colors (Blog)</h6>
+                            <div class="mb-3">
+                                <label for="paginationButtonBackgroundColor" class="form-label">Background Color (Normal)</label>
+                                <input type="color" class="form-control form-control-color" id="paginationButtonBackgroundColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="paginationButtonTextColor" class="form-label">Text Color (Normal)</label>
+                                <input type="color" class="form-control form-control-color" id="paginationButtonTextColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="paginationActiveButtonBackgroundColor" class="form-label">Background Color (Active)</label>
+                                <input type="color" class="form-control form-control-color" id="paginationActiveButtonBackgroundColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="paginationActiveButtonTextColor" class="form-label">Text Color (Active)</label>
+                                <input type="color" class="form-control form-control-color" id="paginationActiveButtonTextColor">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="body-content" role="tabpanel" aria-labelledby="body-content-tab">
+                            <h6>Body and Content Settings</h6>
+                            <div class="mb-3">
+                                <label for="bodyFontFamily" class="form-label">Body Font Family</label>
+                                <select class="form-select" id="bodyFontFamily">
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Playfair Display">Playfair Display</option>
+                                    <option value="Lora">Lora</option>
+                                    <option value="Open Sans">Open Sans</option>
+                                    <option value="Montserrat">Montserrat</option>
+                                    <option value="Raleway">Raleway</option>
+                                    <option value="Nunito">Nunito</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="Source Sans Pro">Source Sans Pro</option>
+                                    <option value="Sofia">Sofia</option>
+                                    <option value="Lato">Lato</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="titleFontFamily" class="form-label">Title Font Family</label>
+                                <select class="form-select" id="titleFontFamily">
+                                    <option value="Playfair Display">Playfair Display</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Lora">Lora</option>
+                                    <option value="Merriweather">Merriweather</option>
+                                    <option value="Open Sans">Open Sans</option>
+                                    <option value="Montserrat">Montserrat</option>
+                                    <option value="Raleway">Raleway</option>
+                                    <option value="Nunito">Nunito</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="Source Sans Pro">Source Sans Pro</option>
+                                    <option value="Sofia">Sofia</option>
+                                    <option value="Lato">Lato</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bodyBackgroundColor" class="form-label">Body Background Color</label>
+                                <input type="color" class="form-control form-control-color" id="bodyBackgroundColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bodyTextColor" class="form-label">Body Text Color</label>
+                                <input type="color" class="form-control form-control-color" id="bodyTextColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bodyLinkColor" class="form-label">Body Link Color</label>
+                                <input type="color" class="form-control form-control-color" id="bodyLinkColor">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="post-styles" role="tabpanel" aria-labelledby="post-styles-tab">
+                            <h6>Post Styles</h6>
+                            <div class="mb-3">
+                                <label for="postBackgroundColor" class="form-label">Post Background Color</label>
+                                <input type="color" class="form-control form-control-color" id="postBackgroundColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="postBorderRadius" class="form-label">Post Border Radius (px)</label>
+                                <input type="number" class="form-control" id="postBorderRadius" min="0" max="50">
+                            </div>
+                            <div class="mb-3">
+                                <label for="postBoxShadow" class="form-label">Post Box Shadow</label>
+                                <input type="text" class="form-control" id="postBoxShadow">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+                            <h6>SEO Settings</h6>
+                            <div class="mb-3">
+                                <label for="metaDescription" class="form-label">Meta Description</label>
+                                <textarea class="form-control" id="metaDescription" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="metaKeywords" class="form-label">Meta Keywords</label>
+                                <input type="text" class="form-control" id="metaKeywords">
+                            </div>
+                            <div class="mb-3">
+                                <label for="robotsTxt" class="form-label">Robots.txt Content</label>
+                                <textarea class="form-control" id="robotsTxt" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="social" role="tabpanel" aria-labelledby="social-tab">
+                            <h6>Social Media Integration</h6>
+                            <div class="mb-3">
+                                <label for="facebookUrl" class="form-label">Facebook URL</label>
+                                <input type="url" class="form-control" id="facebookUrl">
+                            </div>
+                            <div class="mb-3">
+                                <label for="twitterUrl" class="form-label">Twitter URL</label>
+                                <input type="url" class="form-control" id="twitterUrl">
+                            </div>
+                            <div class="mb-3">
+                                <label for="instagramUrl" class="form-label">Instagram URL</label>
+                                <input type="url" class="form-control" id="instagramUrl">
+                            </div>
+                            <div class="mb-3">
+                                <label for="linkedinUrl" class="form-label">LinkedIn URL</label>
+                                <input type="url" class="form-control" id="linkedinUrl">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="analytics" role="tabpanel" aria-labelledby="analytics-tab">
+                            <h6>Analytics Options</h6>
+                            <div class="mb-3">
+                                <label for="googleAnalyticsId" class="form-label">Google Analytics ID</label>
+                                <input type="text" class="form-control" id="googleAnalyticsId">
+                            </div>
+                            <div class="mb-3">
+                                <label for="facebookPixelId" class="form-label">Facebook Pixel ID</label>
+                                <input type="text" class="form-control" id="facebookPixelId">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-css" role="tabpanel" aria-labelledby="custom-css-tab">
+                            <h6>Custom CSS</h6>
+                            <div class="mb-3">
+                                <label for="customCss" class="form-label">Add your custom CSS here</label>
+                                <textarea class="form-control" id="customCss" rows="10"></textarea>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="backup-restore" role="tabpanel" aria-labelledby="backup-restore-tab">
+                            <h6>Backup and Restore</h6>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="backupData()">Backup Data</button>
+                                <button class="btn btn-secondary" onclick="restoreData()">Restore Data</button>
+                            </div>
+                            <div class="mb-3">
+                                <label for="restoreFile" class="form-label">Upload Backup File</label>
+                                <input type="file" class="form-control" id="restoreFile" accept=".json">
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="header" role="tabpanel" aria-labelledby="header-tab">
+                            <h6>Header Settings</h6>
+                            <div class="mb-3">
+                                <label for="headerStyle" class="form-label">Header Style</label>
+                                <select class="form-select" id="headerStyle">
+                                    <option value="default">Default</option>
+                                    <option value="centered">Centered</option>
+                                    <option value="carousel">Carousel</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="headerBackgroundColor" class="form-label">Background Color</label>
+                                <input type="color" class="form-control" id="headerBackgroundColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="headerTextColor" class="form-label">Text Color</label>
+                                <input type="color" class="form-control" id="headerTextColor">
+                            </div>
+                            <div class="mb-3">
+                                <label for="headerFontSize" class="form-label">Font Size (px)</label>
+                                <input type="number" class="form-control" id="headerFontSize" min="12" max="72">
+                            </div>
+                            <div class="mb-3">
+                                <label for="headerPadding" class="form-label">Padding (px)</label>
+                                <input type="number" class="form-control" id="headerPadding" min="0" max="100">
+                            </div>
+                            <div id="carouselSettings" style="display: none;">
+                                <h6>Carousel Settings</h6>
+                                <div class="mb-3">
+                                    <label for="carouselImages" class="form-label">Carousel Images (URLs, comma-separated)</label>
+                                    <textarea class="form-control" id="carouselImages" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="carouselInterval" class="form-label">Interval (ms)</label>
+                                    <input type="number" class="form-control" id="carouselInterval" min="1000" max="10000" step="500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAdvancedOptions()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.min.js"></script>
+    <script>
+        let blogPosts = [];
+        let quill;
+        let footerQuill;
+        let currentPostIndex = -1;
+        let footerContent = "<p>&copy; 2023 Focus on Content Blog. All rights reserved.</p>";
+        let headerImageSettings = {
+            show: false,
+            url: 'https://source.unsplash.com/random/1600x900/?nature,landscape',
+            height: 300
+        };
+        let advancedOptions = {
+            blogName: 'Focus on Content',
+            blogDescription: '',
+            postsPerPage: 5,
+            metaDescription: '',
+            metaKeywords: '',
+            robotsTxt: '',
+            facebookUrl: '',
+            twitterUrl: '',
+            instagramUrl: '',
+            linkedinUrl: '',
+            googleAnalyticsId: '',
+            facebookPixelId: '',
+            customCss: '',
+            headerStyle: 'default',
+            headerBackgroundColor: '#ffffff',
+            headerTextColor: '#000000',
+            headerFontSize: 24,
+            headerPadding: 20,
+            carouselImages: [],
+            carouselInterval: 5000,
+            paginationButtonBackgroundColor: '#0d6efd', 
+            paginationButtonTextColor: '#ffffff', 
+            paginationActiveButtonBackgroundColor: '#0a58ca', 
+            paginationActiveButtonTextColor: '#ffffff',
+            bodyFontFamily: 'Roboto',
+            bodyBackgroundColor: '#fafafa',
+            bodyTextColor: '#333',
+            bodyLinkColor: '#007bff',
+            postBackgroundColor: '#fff',
+            postBorderRadius: 8,
+            postBoxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+            titleFontFamily: 'Playfair Display'
+        };
+
+        let currentPage = 1;
+        const postsPerPageOption = 10; 
+
+        function loadFromLocalStorage() {
+            const storedPosts = localStorage.getItem('blogPosts');
+            if (storedPosts) {
+                blogPosts = JSON.parse(storedPosts);
+            } else {
+                blogPosts = [
+                    {
+                        title: "The Art of Concise Writing",
+                        content: "<p>In today's fast-paced world, the ability to convey your message clearly and concisely is more important than ever. Whether you're writing a blog post, an email, or a social media update, mastering the art of concise writing can make your content more impactful and engaging.</p><p>Here are three key strategies to help you write more concisely:</p><ol><li>Eliminate unnecessary words</li><li>Use active voice</li><li>Break up long sentences</li></ol><p>By implementing these techniques, you'll be well on your way to creating content that resonates with your audience and keeps them coming back for more.</p>",
+                        tags: ["writing", "blogging", "communication"],
+                        date: "2023-05-15",
+                        image: null,
+                        font: "Roboto",
+                        isPasswordProtected: false,
+                        password: null,
+                        pinned: false
+                    },
+                    {
+                        title: "5 Essential SEO Tips for Bloggers",
+                        content: "<p>Search Engine Optimization (SEO) is crucial for any blogger looking to increase their visibility and attract more readers. Here are five essential SEO tips to help you improve your blog's search engine rankings:</p><ol><li>Conduct keyword research</li><li>Optimize your titles and meta descriptions</li><li>Create high-quality, original content</li><li>Use internal and external links strategically</li><li>Improve your site's loading speed</li></ol><p>By implementing these tips, you'll be well on your way to improving your blog's visibility and attracting more organic traffic.</p>",
+                        tags: ["SEO", "blogging", "digital marketing"],
+                        date: "2023-05-10",
+                        image: null,
+                        font: "Open Sans",
+                        isPasswordProtected: false,
+                        password: null,
+                        pinned: false
+                    },
+                    {
+                        title: "The Power of Storytelling in Content Marketing",
+                        content: "<p>Storytelling is a powerful tool in content marketing that can help brands connect with their audience on a deeper level. By weaving narratives into your content, you can create emotional connections, increase engagement, and make your message more memorable.</p><p>Here are some ways to incorporate storytelling into your content marketing strategy:</p><ul><li>Share customer success stories</li><li>Use metaphors and analogies to explain complex concepts</li><li>Create a brand narrative that resonates with your target audience</li><li>Use visual storytelling through images and videos</li></ul><p>Remember, the key to effective storytelling in content marketing is authenticity and relevance to your audience's needs and interests.</p>",
+                        tags: ["content marketing", "storytelling", "branding"],
+                        date: "2023-05-05",
+                        image: null,
+                        font: "Lora",
+                        isPasswordProtected: false,
+                        password: null,
+                        pinned: false
+                    }
+                ];
+                saveToLocalStorage();
+            }
+
+            const storedFooter = localStorage.getItem('footerContent');
+            if (storedFooter) {
+                footerContent = storedFooter;
+            }
+
+            const storedHeaderImageSettings = localStorage.getItem('headerImageSettings');
+            if (storedHeaderImageSettings) {
+                headerImageSettings = JSON.parse(storedHeaderImageSettings);
+            }
+
+            const storedAdvancedOptions = localStorage.getItem('advancedOptions');
+            if (storedAdvancedOptions) {
+                const loadedOptions = JSON.parse(storedAdvancedOptions);
+                advancedOptions = { ...advancedOptions, ...loadedOptions };
+            }
+
+            renderBlogPosts();
+            updateHeaderImage();
+            updateBlogSettings();
+            applyPaginationStyles(); 
+            applyDynamicStyles();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+            localStorage.setItem('footerContent', footerContent);
+            localStorage.setItem('headerImageSettings', JSON.stringify(headerImageSettings));
+            localStorage.setItem('advancedOptions', JSON.stringify(advancedOptions));
+        }
+
+        function renderBlogPosts() {
+            const blogPostsContainer = document.getElementById('blogPosts');
+            blogPostsContainer.innerHTML = '';
+
+            const pinnedPosts = blogPosts.filter(post => post.pinned);
+            const regularPosts = blogPosts.filter(post => !post.pinned);
+
+            const currentPageNumber = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+
+            const startIndex = (currentPageNumber - 1) * advancedOptions.postsPerPage;
+            const endIndex = startIndex + advancedOptions.postsPerPage;
+            const postsToShow = regularPosts.slice(startIndex, endIndex);
+
+            pinnedPosts.forEach((post, index) => {
+                const postElement = createPostElement(post, index);
+                postElement.classList.add('pinned-post');
+                blogPostsContainer.appendChild(postElement);
+            });
+
+            postsToShow.forEach((post, index) => {
+                const postElement = createPostElement(post, index + pinnedPosts.length);
+                blogPostsContainer.appendChild(postElement);
+            });
+
+            const paginationElement = document.createElement('nav');
+            paginationElement.innerHTML = `
+                <ul class="pagination justify-content-center">
+                    ${Array.from({length: Math.ceil(regularPosts.length / advancedOptions.postsPerPage)}, (_, i) => i + 1).map(page => `
+                        <li class="page-item ${page === currentPageNumber ? 'active' : ''}">
+                            <a class="page-link" href="?page=${page}">${page}</a>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            blogPostsContainer.appendChild(paginationElement);
+
+            renderFooter();
+        }
+
+        function createPostElement(post, index) {
+            const postElement = document.createElement('div');
+            postElement.className = `blog-post ${post.isPasswordProtected ? 'locked-post' : ''} ${post.pinned ? 'pinned-post' : ''}`;
+            postElement.innerHTML = `
+                <div class="blog-post-header">
+                    ${post.pinned ? '<span class="pinned-icon">📌</span>' : ''}
+                    <h2 class="blog-post-title" onclick="togglePost(${index}, this)">${post.title}</h2>
+                    ${post.isPasswordProtected ? `<button class="unlock-button" onclick="unlockPost(${index})">🔒</button>` : ''}
+                </div>
+                <div class="blog-post-content" style="font-family: '${post.font}', sans-serif;">
+                    ${post.isPasswordProtected ? '<p>This post is password protected. Click the lock icon to enter password.</p>' : 
+                        `${post.image ? `<img src="${post.image}" alt="Blog post image" style="max-width: 100%; height: auto; margin-bottom: 1em;">` : ''}
+                        ${post.content}
+                        <p><strong>Tags:</strong> ${post.tags.join(', ')}</p>
+                        <p><strong>Published:</strong> ${post.date}</p>`
+                    }
+                </div>
+            `;
+            return postElement;
+        }
+
+        function renderPostList() {
+            const postList = document.getElementById('postList');
+            postList.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * postsPerPageOption;
+            const endIndex = startIndex + postsPerPageOption;
+            const paginatedPosts = blogPosts.slice(startIndex, endIndex);
+
+            paginatedPosts.forEach((post, index) => {
+                const listItem = document.createElement('li');
+                listItem.draggable = true;
+                listItem.dataset.index = startIndex + index;
+                listItem.innerHTML = `
+                    <div class="post-list-title">
+                        ${post.pinned ? '📌 ' : ''}${post.title} ${post.isPasswordProtected ? '🔒' : ''}
+                    </div>
+                    <button class="btn btn-sm btn-primary edit-button" onclick="openEditModal(${startIndex + index})">Edit</button>
+                    <button class="btn btn-sm btn-warning pin-button" onclick="togglePinPost(${startIndex + index})">${post.pinned ? 'Unpin' : 'Pin'}</button>
+                    <button class="btn btn-sm btn-danger delete-button" onclick="confirmDelete(${startIndex + index})">Delete</button>
+                `;
+                listItem.addEventListener('dragstart', dragStart);
+                listItem.addEventListener('dragover', dragOver);
+                listItem.addEventListener('drop', drop);
+                listItem.addEventListener('dragenter', dragEnter);
+                listItem.addEventListener('dragleave', dragLeave);
+                postList.appendChild(listItem);
+            });
+
+            const paginationContainer = document.getElementById('postListPagination');
+            paginationContainer.innerHTML = '';
+
+            if (Math.ceil(blogPosts.length / postsPerPageOption) > 1) {
+                const paginationElement = document.createElement('nav');
+                paginationElement.innerHTML = `
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>
+                        </li>
+                        ${Array.from({length: Math.ceil(blogPosts.length / postsPerPageOption)}, (_, i) => i + 1).map(page => `
+                            <li class="page-item ${page === currentPage ? 'active' : ''}">
+                                <a class="page-link" href="#" onclick="changePage(${page})">${page}</a>
+                            </li>
+                        `).join('')}
+                        <li class="page-item ${currentPage === Math.ceil(blogPosts.length / postsPerPageOption) ? 'disabled' : ''}">
+                            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>
+                        </li>
+                    </ul>
+                `;
+                paginationContainer.appendChild(paginationElement);
+            }
+        }
+
+        function changePage(newPage) {
+            if (newPage >= 1 && newPage <= Math.ceil(blogPosts.length / postsPerPageOption)) {
+                currentPage = newPage;
+                renderPostList();
+            }
+        }
+
+        function openExistingPostsModal() {
+            currentPage = 1;
+            renderPostList();
+            const existingPostsModal = new bootstrap.Modal(document.getElementById('existingPostsModal'));
+            existingPostsModal.show();
+        }
+
+        function togglePinPost(index) {
+            blogPosts[index].pinned = !blogPosts[index].pinned;
+            saveToLocalStorage();
+            renderPostList();
+            renderBlogPosts();
+        }
+
+        function renderFooter() {
+            const footer = document.getElementById('blogFooter');
+            footer.innerHTML = footerContent;
+        }
+
+        let draggedItem = null;
+
+        function dragStart(e) {
+            draggedItem = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+            this.classList.add('dragging');
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            if (this !== draggedItem) {
+                const fromIndex = parseInt(draggedItem.dataset.index);
+                const toIndex = parseInt(this.dataset.index);
+                const movedItem = blogPosts.splice(fromIndex, 1)[0];
+                blogPosts.splice(toIndex, 0, movedItem);
+                renderPostList();
+            }
+            this.classList.remove('over');
+        }
+
+        function dragEnter(e) {
+            this.classList.add('over');
+        }
+
+        function dragLeave(e) {
+            this.classList.remove('over');
+        }
+
+        function savePostOrder() {
+            saveToLocalStorage();
+            renderBlogPosts();
+            const existingPostsModal = bootstrap.Modal.getInstance(document.getElementById('existingPostsModal'));
+            existingPostsModal.hide();
+        }
+
+        function togglePost(index, header) {
+            const post = blogPosts[index];
+            if (!post.isPasswordProtected) {
+                const content = header.closest('.blog-post').querySelector('.blog-post-content');
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+
+        function unlockPost(index) {
+            currentPostIndex = index;
+            const passwordModal = new bootstrap.Modal(document.getElementById('passwordModal'));
+            passwordModal.show();
+        }
+
+        function checkPassword() {
+            const enteredPassword = document.getElementById('enterPassword').value;
+            const post = blogPosts[currentPostIndex];
+            if (enteredPassword === post.password) {
+                const postElement = document.querySelectorAll('.blog-post')[currentPostIndex];
+                const content = postElement.querySelector('.blog-post-content');
+                content.innerHTML = `
+                    ${post.image ? `<img src="${post.image}" alt="Blog post image" style="max-width: 100%; height: auto; margin-bottom: 1em;">` : ''}
+                    ${post.content}
+                    <p><strong>Tags:</strong> ${post.tags.join(', ')}</p>
+                    <p><strong>Published:</strong> ${post.date}</p>
+                `;
+                content.style.display = 'block';
+                const passwordModal = bootstrap.Modal.getInstance(document.getElementById('passwordModal'));
+                passwordModal.hide();
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
+            document.getElementById('enterPassword').value = '';
+        }
+
+        function openEditModal(index) {
+            currentPostIndex = index;
+            const post = blogPosts[index];
+
+            document.getElementById('postTitle').value = post.title;
+            quill.root.innerHTML = post.content;
+            document.getElementById('postTags').value = post.tags.join(', ');
+            document.getElementById('postDate').value = post.date;
+            document.getElementById('isPasswordProtected').checked = post.isPasswordProtected;
+            document.getElementById('isPinned').checked = post.pinned;
+            document.getElementById('postPassword').value = post.password || '';
+            togglePasswordField();
+
+            document.getElementById('postModalLabel').textContent = 'Edit Blog Post';
+
+            const postModal = new bootstrap.Modal(document.getElementById('postModal'));
+            postModal.show();
+        }
+
+        function openNewPostModal() {
+            currentPostIndex = -1;
+
+            document.getElementById('postTitle').value = '';
+            quill.root.innerHTML = '';
+            document.getElementById('postTags').value = '';
+            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('isPasswordProtected').checked = false;
+            document.getElementById('isPinned').checked = false;
+            document.getElementById('postPassword').value = '';
+            togglePasswordField();
+
+            document.getElementById('postModalLabel').textContent = 'Add New Blog Post';
+
+            const postModal = new bootstrap.Modal(document.getElementById('postModal'));
+            postModal.show();
+        }
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value;
+            const content = quill.root.innerHTML;
+            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim());
+            const date = document.getElementById('postDate').value;
+            const imageFile = document.getElementById('postImage').files[0];
+            const isPasswordProtected = document.getElementById('isPasswordProtected').checked;
+            const isPinned = document.getElementById('isPinned').checked;
+            const password = document.getElementById('postPassword').value;
+
+            const savePostData = () => {
+                const postData = {
+                    title: title,
+                    content: content,
+                    tags: tags,
+                    date: date,
+                    image: imageFile ? reader.result : null,
+                    font: 'Roboto',
+                    isPasswordProtected: isPasswordProtected,
+                    password: isPasswordProtected ? password : null,
+                    pinned: isPinned
+                };
+
+                if (currentPostIndex === -1) {
+                    blogPosts.unshift(postData);
+                } else {
+                    blogPosts[currentPostIndex] = postData;
+                }
+                saveToLocalStorage();
+                renderBlogPosts();
+            };
+
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    savePostData();
+                }
+                reader.readAsDataURL(imageFile);
+            } else {
+                savePostData();
+            }
+
+            const postModal = bootstrap.Modal.getInstance(document.getElementById('postModal'));
+            postModal.hide();
+        }
+
+        function confirmDelete(index) {
+            currentPostIndex = index;
+            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            confirmDeleteModal.show();
+        }
+
+        function deletePost() {
+            blogPosts.splice(currentPostIndex, 1);
+            saveToLocalStorage();
+            renderBlogPosts();
+            renderPostList();
+            const confirmDeleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+            confirmDeleteModal.hide();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                toggleBtn.innerHTML = '&times;';
+                toggleBtn.style.left = '270px';
+            } else {
+                toggleBtn.innerHTML = '☰';
+                toggleBtn.style.left = '20px';
+            }
+        }
+
+        function openHeaderImageModal() {
+            document.getElementById('headerImageToggle').checked = headerImageSettings.show;
+            document.getElementById('headerImageUrl').value = headerImageSettings.url;
+            document.getElementById('headerImageHeight').value = headerImageSettings.height;
+            const headerImageModal = new bootstrap.Modal(document.getElementById('headerImageModal'));
+            headerImageModal.show();
+        }
+
+        function saveHeaderImageSettings() {
+            headerImageSettings.show = document.getElementById('headerImageToggle').checked;
+            headerImageSettings.url = document.getElementById('headerImageUrl').value;
+            headerImageSettings.height = document.getElementById('headerImageHeight').value;
+            saveToLocalStorage();
+            updateHeaderImage();
+            const headerImageModal = bootstrap.Modal.getInstance(document.getElementById('headerImageModal'));
+            headerImageModal.hide();
+        }
+
+        function updateHeaderImage() {
+            const headerImage = document.getElementById('headerImage');
+            headerImage.style.display = headerImageSettings.show ? 'block' : 'none';
+            headerImage.style.backgroundImage = `url('${headerImageSettings.url}')`;
+            headerImage.style.height = `${headerImageSettings.height}px`;
+        }
+
+        function openFooterModal() {
+            footerQuill.root.innerHTML = footerContent;
+            const footerModal = new bootstrap.Modal(document.getElementById('footerModal'));
+            footerModal.show();
+        }
+
+        function saveFooter() {
+            footerContent = footerQuill.root.innerHTML;
+            saveToLocalStorage();
+            renderFooter();
+            const footerModal = bootstrap.Modal.getInstance(document.getElementById('footerModal'));
+            footerModal.hide();
+        }
+
+        function togglePasswordField() {
+            const isPasswordProtected = document.getElementById('isPasswordProtected').checked;
+            const passwordField = document.getElementById('passwordField');
+            passwordField.style.display = isPasswordProtected ? 'block' : 'none';
+        }
+
+        function openExistingPostsModal() {
+            currentPage = 1;
+            renderPostList();
+            const existingPostsModal = new bootstrap.Modal(document.getElementById('existingPostsModal'));
+            existingPostsModal.show();
+        }
+
+        function openAdvancedOptionsModal() {
+            document.getElementById('blogName').value = advancedOptions.blogName;
+            document.getElementById('blogDescription').value = advancedOptions.blogDescription;
+            document.getElementById('postsPerPage').value = advancedOptions.postsPerPage;
+            document.getElementById('metaDescription').value = advancedOptions.metaDescription;
+            document.getElementById('metaKeywords').value = advancedOptions.metaKeywords;
+            document.getElementById('robotsTxt').value = advancedOptions.robotsTxt;
+            document.getElementById('facebookUrl').value = advancedOptions.facebookUrl;
+            document.getElementById('twitterUrl').value = advancedOptions.twitterUrl;
+            document.getElementById('instagramUrl').value = advancedOptions.instagramUrl;
+            document.getElementById('linkedinUrl').value = advancedOptions.linkedinUrl;
+            document.getElementById('googleAnalyticsId').value = advancedOptions.googleAnalyticsId;
+            document.getElementById('facebookPixelId').value = advancedOptions.facebookPixelId;
+            document.getElementById('customCss').value = advancedOptions.customCss;
+            document.getElementById('headerStyle').value = advancedOptions.headerStyle;
+            document.getElementById('headerBackgroundColor').value = advancedOptions.headerBackgroundColor;
+            document.getElementById('headerTextColor').value = advancedOptions.headerTextColor;
+            document.getElementById('headerFontSize').value = advancedOptions.headerFontSize;
+            document.getElementById('headerPadding').value = advancedOptions.headerPadding;
+            document.getElementById('carouselImages').value = advancedOptions.carouselImages.join(', ');
+            document.getElementById('carouselInterval').value = advancedOptions.carouselInterval;
+
+            document.getElementById('paginationButtonBackgroundColor').value = advancedOptions.paginationButtonBackgroundColor || '#0d6efd'; 
+            document.getElementById('paginationButtonTextColor').value = advancedOptions.paginationButtonTextColor || '#ffffff'; 
+            document.getElementById('paginationActiveButtonBackgroundColor').value = advancedOptions.paginationActiveButtonBackgroundColor || '#0a58ca'; 
+            document.getElementById('paginationActiveButtonTextColor').value = advancedOptions.paginationActiveButtonTextColor || '#ffffff'; 
+
+
+            document.getElementById('bodyFontFamily').value = advancedOptions.bodyFontFamily;
+            document.getElementById('bodyBackgroundColor').value = advancedOptions.bodyBackgroundColor;
+            document.getElementById('bodyTextColor').value = advancedOptions.bodyTextColor;
+            document.getElementById('bodyLinkColor').value = advancedOptions.bodyLinkColor;
+
+            document.getElementById('postBackgroundColor').value = advancedOptions.postBackgroundColor;
+            document.getElementById('postBorderRadius').value = advancedOptions.postBorderRadius;
+            document.getElementById('postBoxShadow').value = advancedOptions.postBoxShadow;
+
+            document.getElementById('titleFontFamily').value = advancedOptions.titleFontFamily;
+
+            const advancedOptionsModal = new bootstrap.Modal(document.getElementById('advancedOptionsModal'));
+            advancedOptionsModal.show();
+        }
+
+        function saveAdvancedOptions() {
+            advancedOptions.blogName = document.getElementById('blogName').value;
+            advancedOptions.blogDescription = document.getElementById('blogDescription').value;
+            advancedOptions.postsPerPage = parseInt(document.getElementById('postsPerPage').value) || 5; 
+            advancedOptions.metaDescription = document.getElementById('metaDescription').value;
+            advancedOptions.metaKeywords = document.getElementById('metaKeywords').value;
+            advancedOptions.robotsTxt = document.getElementById('robotsTxt').value;
+            advancedOptions.facebookUrl = document.getElementById('facebookUrl').value;
+            advancedOptions.twitterUrl = document.getElementById('twitterUrl').value;
+            advancedOptions.instagramUrl = document.getElementById('instagramUrl').value;
+            advancedOptions.linkedinUrl = document.getElementById('linkedinUrl').value;
+            advancedOptions.googleAnalyticsId = document.getElementById('googleAnalyticsId').value;
+            advancedOptions.facebookPixelId = document.getElementById('facebookPixelId').value;
+            advancedOptions.customCss = document.getElementById('customCss').value;
+            advancedOptions.headerStyle = document.getElementById('headerStyle').value;
+            advancedOptions.headerBackgroundColor = document.getElementById('headerBackgroundColor').value;
+            advancedOptions.headerTextColor = document.getElementById('headerTextColor').value;
+            advancedOptions.headerFontSize = parseInt(document.getElementById('headerFontSize').value) || 24; 
+            advancedOptions.headerPadding = parseInt(document.getElementById('headerPadding').value) || 20; 
+            advancedOptions.carouselImages = document.getElementById('carouselImages').value.split(',').map(url => url.trim()).filter(url => url); 
+            advancedOptions.carouselInterval = parseInt(document.getElementById('carouselInterval').value) || 5000; 
+
+            advancedOptions.paginationButtonBackgroundColor = document.getElementById('paginationButtonBackgroundColor').value;
+            advancedOptions.paginationButtonTextColor = document.getElementById('paginationButtonTextColor').value;
+            advancedOptions.paginationActiveButtonBackgroundColor = document.getElementById('paginationActiveButtonBackgroundColor').value;
+            advancedOptions.paginationActiveButtonTextColor = document.getElementById('paginationActiveButtonTextColor').value;
+
+            advancedOptions.bodyFontFamily = document.getElementById('bodyFontFamily').value;
+            advancedOptions.bodyBackgroundColor = document.getElementById('bodyBackgroundColor').value;
+            advancedOptions.bodyTextColor = document.getElementById('bodyTextColor').value;
+            advancedOptions.bodyLinkColor = document.getElementById('bodyLinkColor').value;
+
+            advancedOptions.postBackgroundColor = document.getElementById('postBackgroundColor').value;
+            advancedOptions.postBorderRadius = parseInt(document.getElementById('postBorderRadius').value) || 8; 
+            advancedOptions.postBoxShadow = document.getElementById('postBoxShadow').value;
+
+            advancedOptions.titleFontFamily = document.getElementById('titleFontFamily').value;
+
+            saveToLocalStorage();
+            updateBlogSettings();
+            applyPaginationStyles(); 
+            applyDynamicStyles();
+
+            const advancedOptionsModal = bootstrap.Modal.getInstance(document.getElementById('advancedOptionsModal'));
+            advancedOptionsModal.hide();
+        }
+
+        function applyHeaderSettings() {
+            const header = document.querySelector('header');
+            header.style.backgroundColor = advancedOptions.headerBackgroundColor || '#ffffff';
+            header.style.color = advancedOptions.headerTextColor || '#000000';
+            header.style.fontSize = `${advancedOptions.headerFontSize || 24}px`;
+            header.style.padding = `${advancedOptions.headerPadding || 20}px`;
+
+            if (advancedOptions.headerStyle === 'centered') {
+                header.style.textAlign = 'center';
+            } else {
+                header.style.textAlign = 'left';
+            }
+
+            if (advancedOptions.headerStyle === 'carousel') {
+                createHeaderCarousel();
+            } else {
+                removeHeaderCarousel();
+            }
+        }
+
+        function createHeaderCarousel() {
+            const header = document.querySelector('header');
+            header.innerHTML = `
+                <div id="headerCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        ${advancedOptions.carouselImages.map((url, index) => `
+                            <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                                <img src="${url}" class="d-block w-100" alt="Carousel image ${index + 1}">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#headerCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#headerCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <h1>${advancedOptions.blogName}</h1>
+            `;
+
+            const carousel = new bootstrap.Carousel(document.getElementById('headerCarousel'), {
+                interval: advancedOptions.carouselInterval || 5000 
+            });
+        }
+
+        function removeHeaderCarousel() {
+            const header = document.querySelector('header');
+            header.innerHTML = `<h1>${advancedOptions.blogName}</h1>`;
+        }
+
+        function updateBlogSettings() {
+            document.title = advancedOptions.blogName;
+            document.querySelector('h1').textContent = advancedOptions.blogName;
+
+            updateMetaTag('description', advancedOptions.metaDescription);
+            updateMetaTag('keywords', advancedOptions.metaKeywords);
+
+            let customStyleTag = document.getElementById('customStyles');
+            if (!customStyleTag) {
+                customStyleTag = document.createElement('style');
+                customStyleTag.id = 'customStyles';
+                document.head.appendChild(customStyleTag);
+            }
+            customStyleTag.textContent = advancedOptions.customCss;
+
+            applyHeaderSettings();
+        }
+
+        function updateMetaTag(name, content) {
+            let metaTag = document.querySelector(`meta[name="${name}"]`);
+            if (!metaTag) {
+                metaTag = document.createElement('meta');
+                metaTag.setAttribute('name', name);
+                document.head.appendChild(metaTag);
+            }
+            metaTag.setAttribute('content', content);
+        }
+
+        function backupData() {
+            const data = {
+                blogPosts: blogPosts,
+                footerContent: footerContent,
+                headerImageSettings: headerImageSettings,
+                advancedOptions: advancedOptions
+            };
+            const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'blog_backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function restoreData() {
+            const file = document.getElementById('restoreFile').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        blogPosts = data.blogPosts;
+                        footerContent = data.footerContent;
+                        headerImageSettings = data.headerImageSettings;
+                        advancedOptions = data.advancedOptions;
+                        saveToLocalStorage();
+                        renderBlogPosts();
+                        updateHeaderImage();
+                        updateBlogSettings();
+                        applyPaginationStyles(); 
+                        applyDynamicStyles();
+                        alert('Data restored successfully!');
+                    } catch (error) {
+                        alert('Error restoring data. Please check the file format.');
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Please select a backup file to restore.');
+            }
+        }
+
+        function applyPaginationStyles() {
+            let paginationStyleTag = document.getElementById('paginationStyles');
+            if (!paginationStyleTag) {
+                paginationStyleTag = document.createElement('style');
+                paginationStyleTag.id = 'paginationStyles';
+                document.head.appendChild(paginationStyleTag);
+            }
+
+            const normalBg = advancedOptions.paginationButtonBackgroundColor || '#0d6efd';
+            const normalColor = advancedOptions.paginationButtonTextColor || '#ffffff';
+            const activeBg = advancedOptions.paginationActiveButtonBackgroundColor || '#0a58ca';
+            const activeColor = advancedOptions.paginationActiveButtonTextColor || '#ffffff';
+
+            paginationStyleTag.textContent = `
+                .pagination .page-link {
+                    background-color: ${normalBg};
+                    color: ${normalColor};
+                    border-color: ${normalBg}; 
+                    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+                }
+
+                .pagination .page-link:hover {
+                    background-color: ${normalColor}; 
+                    color: ${normalBg};
+                    border-color: ${normalBg};
+                }
+
+                 .pagination .page-link:focus {
+                    box-shadow: 0 0 0 0.25rem rgba(${parseInt(normalBg.slice(1, 3), 16)}, ${parseInt(normalBg.slice(3, 5), 16)}, ${parseInt(normalBg.slice(5, 7), 16)}, 0.25); 
+                 }
+
+
+                .pagination .page-item.active .page-link {
+                    background-color: ${activeBg};
+                    color: ${activeColor};
+                    border-color: ${activeBg}; 
+                }
+
+                .pagination .page-item.active .page-link:hover {
+                     background-color: ${activeColor}; 
+                     color: ${activeBg};
+                     border-color: ${activeBg};
+                }
+
+                .pagination .page-item.disabled .page-link {
+                    background-color: #e9ecef; 
+                    color: #6c757d;
+                    border-color: #dee2e6;
+                }
+            `;
+        }
+
+        function applyDynamicStyles() {
+            let dynamicStyleTag = document.getElementById('dynamicAdvancedStyles');
+            if (!dynamicStyleTag) {
+                dynamicStyleTag = document.createElement('style');
+                dynamicStyleTag.id = 'dynamicAdvancedStyles';
+                document.head.appendChild(dynamicStyleTag);
+            }
+
+            dynamicStyleTag.textContent = `
+                :root {
+                    --body-font-family: ${advancedOptions.bodyFontFamily};
+                    --body-background-color: ${advancedOptions.bodyBackgroundColor};
+                    --body-text-color: ${advancedOptions.bodyTextColor};
+                    --body-link-color: ${advancedOptions.bodyLinkColor};
+                    --post-background-color: ${advancedOptions.postBackgroundColor};
+                    --post-border-radius: ${advancedOptions.postBorderRadius}px;
+                    --post-box-shadow: ${advancedOptions.postBoxShadow};
+                    --title-font-family: ${advancedOptions.titleFontFamily};
+                }
+
+                .blog-post-title, h1 {
+                    font-family: var(--title-font-family), serif !important;
+                }
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFromLocalStorage();
+
+            const fonts = [
+                'raleway',
+                'montserrat',
+                'poppins',
+                'opensans',
+                'sofia',
+                'lato',
+                'roboto'
+            ];
+
+            const fontSizes = ['12px', '14px', '16px', '20px', '24px', '28px', '32px', '36px', '42px', '50px', '48px', '60px', '72px'];
+
+            const toolbarOptions = [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'font': fonts }],
+                [{ 'size': fontSizes }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'header': 1 }, { 'header': 2 }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }],
+                [{ 'align': [] }],
+                ['blockquote', 'code-block'],
+                ['link', 'image', 'video'],
+                ['clean']
+            ];
+
+            quill = new Quill('#editor-container', {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+            });
+
+            footerQuill = new Quill('#footer-editor-container', {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+            });
+
+            document.getElementById('isPasswordProtected').addEventListener('change', togglePasswordField);
+            document.getElementById('headerStyle').addEventListener('change', function() {
+                const carouselSettings = document.getElementById('carouselSettings');
+                carouselSettings.style.display = this.value === 'carousel' ? 'block' : 'none';
+            });
+
+            quill.getModule('toolbar').addHandler('image', function(image) {
+                const imageUrl = prompt('Enter image URL:');
+                if (imageUrl) {
+                    this.quill.insertEmbed(this.quill.getSelection().index, 'image', imageUrl);
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
