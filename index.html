@@ -159,7 +159,7 @@
     }
     .blog-post-content {
         padding: 1em;
-        display: none;
+        display: block;
         /* Apply dynamic body font family */
         font-family: var(--body-font-family, 'Roboto', sans-serif) !important; 
     }
@@ -361,31 +361,25 @@
 <style id="paginationStyles"></style>
 <style id="customStyles"></style>
 <style id="dynamicAdvancedStyles"></style>
+
+
 </head>
 <body>
     <button style="display:none;" class="btn btn-primary toggle-btn" onclick="toggleSidebar()">☰</button>
 
-    <div class="sidebar" id="sidebar">
-        <h2><i class="fas fa-blog"></i> Blog Management</h2>
-        <button class="sidebar-button" onclick="openNewPostModal()"><i class="fas fa-plus"></i> Add New Post</button>
-        <button class="sidebar-button" onclick="openHeaderImageModal()"><i class="fas fa-image"></i> Header Image Settings</button>
-        <button class="sidebar-button" onclick="openExistingPostsModal()"><i class="fas fa-list"></i> Manage Existing Posts</button>
-        <button class="sidebar-button" onclick="openAdvancedOptionsModal()"><i class="fas fa-cogs"></i> Advanced Options</button>
-        <h3><i class="fas fa-footer"></i> Footer</h3>
-        <button class="sidebar-button" onclick="openFooterModal()"><i class="fas fa-edit"></i> Edit Footer</button>
-    </div>
+   
 
     <div class="container">
         <div class="header-image" id="headerImage"></div>
         <header>
-            <h1>Focus on Content</h1>
+            <h1>Astro Aspects</h1>
         </header>
 
         <nav class="nav-bar">
-            <a href="https://websimcreative.com/blog/" class="active">Home</a>
-            <a href="https://websimcreative.com/blog/about">About</a>
-            <a href="https://websimcreative.com/blog/archive">Archive</a>
-            <a href="https://websimcreative.com/blog/contact">Contact</a>
+            <a href="https://ismaellima21.github.io/blog/" class="active">Home</a>
+            <a href="https://ismaellima21.github.io/blog/about">About</a>
+            <a href="https://ismaellima21.github.io/blog/">Archive</a>
+            <a href="https://ismaellima21.github.io/blog/contacto">Contact</a>
         </nav>
 
         <main id="blogPosts">
@@ -821,7 +815,7 @@
         let footerContent = "<p>&copy; 2025 Astro Aspects Blog. All rights reserved.</p>";
         let headerImageSettings = {
             show: false,
-            url: 'https://source.unsplash.com/random/1600x900/?nature,landscape',
+            url: '',
             height: 300
         };
         let advancedOptions = {
@@ -1534,8 +1528,7 @@
             `;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadFromLocalStorage();
+        
 
             const fonts = [
                 'raleway',
@@ -1592,9 +1585,9 @@
                     this.quill.insertEmbed(this.quill.getSelection().index, 'image', imageUrl);
                 }
             });
-        });
+        
 
-//-------------------------------------------------------
+//--------------------------opcion carga el json desde ubicacion remota-----------------------------
 
 
 window.addEventListener('DOMContentLoaded', () => {
