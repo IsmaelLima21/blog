@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astro Aspects</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts Links -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+
+  <style>
+    :root {
+      --color-primary: #f02424;
+      --color-secondary: #ca0202;
+      --color-accent: #ebebeb;
+      --color-background: #fafafa;
+      --primary-font: Playfair Display, serif;
+      --secondary-font: Open Sans, sans-serif;
+    }
+
+    /* Apply fonts */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--primary-font);
+    }
+
+    body, p, a:not(.whatsapp-float-btn), 
+    li, span, div:not([class*="text-"]):not([class*="font-"]):not([class*="h-"]):not([class*="grid"]):not([class*="flex"]):not([class*="space-"]) {
+      font-family: var(--secondary-font);
+    }
+     button {
+       font-family: var(--secondary-font);
+     }
+
+
+    /* Apply colors - Tailwind utility classes are already in mockupContent */
+    /* Override Tailwind classes where necessary to apply custom colors */
+    .gradient-bg {
+         background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    }
+
+    
+    button {
+        background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)) !important;
+        color: white !important;
+        border: none !important;
+    }
+    button:hover {
+         background: linear-gradient(90deg, var(--color-secondary), var(--color-primary)) !important;
+    }
+    /* Exclude specific buttons if needed, e.g., social icons */
+    .fab {
+        background: none !important; /* Remove gradient from icons */
+        color: var(--color-primary) !important; /* Set icon color */
+    }
+    
+
+    /* Ensure custom background color is applied */
+     .bg-indigo-100 {
+        background-color: var(--color-background) !important;
+     }
+     /* Ensure custom primary color is applied to relevant elements */
+      .text-indigo-600 {
+         color: var(--color-primary) !important;
+      }
+      .bg-indigo-600 {
+         background-color: var(--color-primary) !important;
+      }
+       .hover\:bg-indigo-700:hover {
+         background-color: var(--color-accent) !important;
+      }
+
+      
+      /* WhatsApp Floating Button Style */
+      .whatsapp-float-btn {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background-color: #25D366; 
+          color: white  !important;
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+          display: flex;
+          align-items: center;
+          justify-center;
+          font-size: 28px;
+          box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+          z-index: 1000; 
+          transition: transform 0.3s ease-in-out;
+          text-decoration: none; 
+      }
+      .whatsapp-float-btn:hover {
+          transform: scale(1.1);
+      }
+      
+html {
+  scroll-behavior: smooth;
+}
+
+  </style>
+</head>
+<body id="top">
+  
+          <header class="bg-indigo-100 py-20 text-center" style="background-color: rgb(254, 242, 242);">
+            <div class="container mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h1 class="text-4xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Astro Aspects</h1>
+              <p class="text-xl mb-8" style="font-family: &quot;Open Sans&quot;, sans-serif;">Reportes astrológicos que reflejan tu esencia.</p>
+              
+				<a href="https://wa.me/50360178721?text=Quiero ordenar mi Reporte Natal Personalizado %20" class="" target="_blank">
+					
+				<button class="bg-indigo-600 text-white px-6 py-3 rounded-full text-lg gradient-button" data-original-background="rgb(79, 70, 229)" style="background: linear-gradient(90deg, rgb(239, 68, 68), rgb(220, 38, 38)); color: white; font-family: &quot;Open Sans&quot;, sans-serif;">Ordena el tuyo</button>
+              </a>
+			 </div>
+          </header>
+        
+          <nav class="bg-white shadow-md p-4">
+            <div class="container mx-auto flex justify-between items-center">
+              <a href="#" class="text-indigo-600 font-bold" style="color: rgb(239, 68, 68); font-family: &quot;Open Sans&quot;, sans-serif;">Logo</a>
+              <div class="flex items-center space-x-4">
+                <a href="#top" class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Inicio</a>
+				  <a href="#about" class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">About</a>
+                <a href="#servicio" class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Servicio</a>
+                <a href="#contacto" class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Contacto</a>
+                </div>
+            </div>
+          </nav>  
+        
+          <section class="py-12 max-w-4xl mx-auto">
+            <div id="about" class="container mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-3xl font-bold mb-6 text-center" style="font-family: &quot;Playfair Display&quot;, serif;">Sobre Nosotros</h2>
+              <p class="text-gray-600 mb-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">En Astro Aspects creemos que la astrología no es solo simbología: es una herramienta para entendernos mejor, tomar decisiones más conscientes y reconocer nuestro potencial.</p>
+              <p class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Nos especializamos en crear reportes astrológicos personalizados, con un enfoque claro, profundo y práctico. Combinamos conocimiento técnico con una lectura humana y accesible, para que cada persona pueda conectar con su carta natal sin enredos ni confusión.</p>
+            </div>
+          </section>
+        
+          <section class="bg-gray-100 py-12 max-w-5xl mx-auto ">
+            <div class="container mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-3xl font-bold mb-8 text-center" style="font-family: &quot;Playfair Display&quot;, serif;">Beneficios</h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <i class="fas fa-check-circle text-3xl text-indigo-600 mb-4" style="color: rgb(239, 68, 68);"></i>
+                  <h3 class="text-xl font-semibold mb-2" style="font-family: &quot;Playfair Display&quot;, serif;">Interpretación Personalizada</h3>
+                  <p class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Recibe un análisis único basado en tu fecha, hora y lugar de nacimiento. Nada genérico: todo está adaptado a ti.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <i class="fas fa-star text-3xl text-indigo-600 mb-4" style="color: rgb(239, 68, 68);"></i>
+                  <h3 class="text-xl font-semibold mb-2" style="font-family: &quot;Playfair Display&quot;, serif;">Enfoque Claro y Práctico</h3>
+                  <p class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Información útil que puedes aplicar en tu día a día. Te ayudamos a comprender tus fortalezas, desafíos y oportunidades de crecimiento.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <i class="fas fa-bolt text-3xl text-indigo-600 mb-4" style="color: rgb(239, 68, 68);"></i>
+                  <h3 class="text-xl font-semibold mb-2" style="font-family: &quot;Playfair Display&quot;, serif;">Formato Visual y Fácil de Leer</h3>
+                  <p class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Reportes bonitos, bien organizados y sin lenguaje complicado. Ideal para quienes quieren claridad sin perder profundidad.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        
+          <section class="py-12 bg-gray-100 max-w-5xl mx-auto">
+            <div class="container max-w-3xl mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-3xl font-bold mb-8 text-center" style="font-family: &quot;Playfair Display&quot;, serif;">Galería</h2>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <img src="https://source.unsplash.com/random/400x300?minimal,1" alt="Imagen de galería minimalista" class="w-full h-40 object-cover rounded-lg" width="400" height="300">
+                <img src="https://source.unsplash.com/random/400x300?minimal,2" alt="Imagen de galería minimalista" class="w-full h-40 object-cover rounded-lg" width="400" height="300">
+                <img src="https://source.unsplash.com/random/400x300?minimal,3" alt="Imagen de galería minimalista" class="w-full h-40 object-cover rounded-lg" width="400" height="300">
+                <img src="https://source.unsplash.com/random/400x300?minimal,4" alt="Imagen de galería minimalista" class="w-full h-40 object-cover rounded-lg" width="400" height="300">
+              </div>
+            </div>
+          </section>
+        
+          <section class="py-12 max-w-4xl mx-auto">
+            <div class="container mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-3xl font-bold mb-8 text-center" style="font-family: &quot;Playfair Display&quot;, serif;">Videos Destacados</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="aspect-w-16 aspect-h-9">
+                  <div class="relative" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                    <iframe class="w-full h-[300px]" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video demostrativo 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+                    </iframe>
+                  </div>
+                  <h3 class="text-xl font-semibold mt-4" style="font-family: &quot;Playfair Display&quot;, serif;">Video Demostrativo </h3>
+                  <p class="text-gray-600" style="font-family: &quot;Open Sans&quot;, sans-serif;">Descripción del video </p>
+                </div>
+                          </section>
+        
+          <section class="py-12 max-w-4xl mx-auto ">
+            <div id="servicio" class="bg-white p-6 rounded-lg shadow" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-4xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Reporte Natal</h2>
+              <p class="text-gray-600 max-w-3xl mx-auto" style="font-family: 'Open Sans', sans-serif; text-align: justify;">
+                Nuestros reportes astrológicos están diseñados para ayudarte a comprender tu carta natal de forma clara y accesible. Analizamos los aspectos más importantes entre planetas, luminarias y puntos clave para revelar cómo influyen en tu personalidad, tus decisiones y tu camino de vida. Todo el contenido es personalizado según tu fecha, hora y lugar de nacimiento. Cada reporte está pensado para que puedas reconocer tus fortalezas, entender tus desafíos y descubrir oportunidades de crecimiento. Ya sea que estés comenzando a explorar la astrología o que quieras una mirada más profunda y ordenada de tu mapa.
+				</p>
+            </div>
+          </section>
+        
+          <section class="py-12 bg-indigo-100" style="background-color: rgb(254, 242, 242);">
+            <div class="container mx-auto px-3" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-3xl font-bold mb-8 text-center" style="font-family: &quot;Playfair Display&quot;, serif;">Testimonios</h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <p class="text-gray-600 mb-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">"Nunca había entendido mi carta natal hasta que leí este reporte. Todo está explicado con claridad, sin lenguaje enredado, y sentí que hablaba directamente de mí.”</p>
+                  <p class="font-semibold" style="font-family: &quot;Open Sans&quot;, sans-serif;">— Carolina R.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <p class="text-gray-600 mb-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">“Me ayudó a ver patrones que se repetían en mi vida y a entender por qué reacciono como reacciono. Es una guía que vuelvo a leer cada tanto.”</p>
+                  <p class="font-semibold" style="font-family: &quot;Open Sans&quot;, sans-serif;">— Luis M.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <p class="text-gray-600 mb-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">“He comprado otros reportes antes, pero este fue el más completo y humano que he recibido. Sentí que por fin conecté con mi carta de verdad.”</p>
+                  <p class="font-semibold" style="font-family: &quot;Open Sans&quot;, sans-serif;">— Andrea T.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        
+          <section class="py-12">
+            <div class="container mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-3xl font-bold mb-8 text-center" style="font-family: &quot;Playfair Display&quot;, serif;">Precio</h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+                <div class="bg-white p-8 rounded-lg shadow-md text-center">
+                  <h3 class="text-2xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Reporte Carta Natal</h3>
+                  <p class="text-4xl font-bold mb-6" style="font-family: &quot;Open Sans&quot;, sans-serif;">$19.99<span class="text-sm text-gray-500" style="font-family: &quot;Open Sans&quot;, sans-serif;"></span></p>
+                  <ul class="text-left mb-6">
+                    <li class="mb-2" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fas fa-check text-green-500 mr-2"></i> Análisis de aspectos clave de tu carta natal</li>
+                    <li class="mb-2" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fas fa-check text-green-500 mr-2"></i> Formato Digital</li>
+                    <li class="mb-2" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fas fa-check text-green-500 mr-2"></i> Formato PDF</li>
+                    <li class="mb-2" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fas fa-check text-green-500 mr-2"></i> Entrega Rápida</li>
+                  </ul>
+					
+					<a href="https://wa.me/50360178721?text=Quiero ordenar mi Reporte Natal Personalizado %20" class="" target="_blank">
+						
+                  <button class="bg-indigo-600 text-white px-6 py-2 rounded-full gradient-button" data-original-background="rgb(79, 70, 229)" style="background: linear-gradient(90deg, rgb(239, 68, 68), rgb(220, 38, 38)); color: white; font-family: &quot;Open Sans&quot;, sans-serif;">Ordenar</button>
+                   </a>	
+				</div>
+              </div>
+            </div>
+          </section>
+        
+          <section class="py-12 bg-indigo-600 text-white">
+            <div class="container mx-auto px-4 text-center">
+              <h2 class="text-3xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">¿Listo para comenzar?</h2>
+              <p class="text-xl mb-8" style="font-family: &quot;Open Sans&quot;, sans-serif;">Solicita tu reporte astrológico y empieza el viaje.</p>
+             
+				
+				<a href="https://wa.me/50360178721?text=Quiero ordenar mi Reporte Natal Personalizado %20" class="" target="_blank">    
+				<button class="bg-white text-indigo-100 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-300 gradient-button" data-original-background="#fcfcfc" style="background: linear-gradient(90deg, rgb(239, 68, 68), rgb(220, 38, 38)); color: rgb(239, 68, 68); font-family: &quot;Open Sans&quot;, sans-serif;">Ordena ahora</button>
+            </a>				 
+				 </div>
+          </section>
+				
+				
+        
+          <section class="py-12">
+            <div id="contacto" class="container mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <h2 class="text-3xl font-bold mb-8 text-center" style="font-family: &quot;Playfair Display&quot;, serif;">Contáctanos</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  
+                  
+                 </div>
+                <div style="font-family: &quot;Open Sans&quot;, sans-serif; ">
+                  <h3 class="text-xl font-semibold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Envíanos un mensaje</h3>
+                  <form>
+                    <div class="mb-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                      <input type="text" placeholder="Nombre" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                      <input type="email" placeholder="Correo electrónico" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                      <textarea placeholder="Mensaje" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                    </div>
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition duration-300 gradient-button" data-original-background="rgb(79, 70, 229)" style="background: linear-gradient(90deg, rgb(239, 68, 68), rgb(220, 38, 38)); color: white; font-family: &quot;Open Sans&quot;, sans-serif;">Enviar mensaje</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+        
+          <footer class="bg-gray-800 text-white py-12">
+            <div class="container mx-auto px-4" style="font-family: &quot;Open Sans&quot;, sans-serif;">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <h4 class="text-xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Acerca de</h4>
+                  <p class="text-gray-400" style="font-family: &quot;Open Sans&quot;, sans-serif;">En Astro Aspects creemos que la astrología no es solo simbología: es una herramienta para entendernos mejor, tomar decisiones más conscientes y reconocer nuestro potencial.</p>
+                </div>
+                <div style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <h4 class="text-xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Enlaces</h4>
+                  <ul class="space-y-2">
+                    <li style="font-family: &quot;Open Sans&quot;, sans-serif;"><a href="#top" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;">Inicio</a></li>
+                    <li style="font-family: &quot;Open Sans&quot;, sans-serif;"><a href="#servicio" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;">Servicios</a></li>
+                    <li style="font-family: &quot;Open Sans&quot;, sans-serif;"><a href="#about" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;">Nosotros</a></li>
+                    <li style="font-family: &quot;Open Sans&quot;, sans-serif;"><a href="#contacto" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;">Contacto</a></li>
+                  </ul>
+                </div>
+                <div style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <h4 class="text-xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Contacto</h4>
+                  <ul class="space-y-2 text-gray-400">
+                    <li style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fas fa-map-marker-alt mr-2"></i>Calle Principal</li>
+                    <li style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fas fa-phone mr-2"></i>+1 234 567 890</li>
+                    <li style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fas fa-envelope mr-2"></i>info@ejemplo.com</li>
+                  </ul>
+                </div>
+                <div style="font-family: &quot;Open Sans&quot;, sans-serif;">
+                  <h4 class="text-xl font-bold mb-4" style="font-family: &quot;Playfair Display&quot;, serif;">Redes Sociales</h4>
+                  <div class="flex space-x-4">
+                    <a href="https://facebook.com" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fab fa-facebook-f text-2xl"></i></a>
+                    <a href="https://twitter.com" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fab fa-twitter text-2xl"></i></a>
+                    <a href="https://instagram.com" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fab fa-instagram text-2xl"></i></a>
+                    <a href="https://linkedin.com" class="text-gray-400 hover:text-white" style="font-family: &quot;Open Sans&quot;, sans-serif;"><i class="fab fa-linkedin-in text-2xl"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p style="font-family: &quot;Open Sans&quot;, sans-serif;">© 2022 Astro Aspects. Todos los derechos reservados.</p>
+              </div>
+            </div>
+          </footer>
+        
+    <a href="https://wa.me/50360178721?text=Quiero ordenar mi Reporte Natal Personalizado %20" class="whatsapp-float-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+</body>
+</html>
